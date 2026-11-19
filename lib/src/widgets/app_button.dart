@@ -98,13 +98,7 @@ class CustomIconButton extends StatelessWidget {
       decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primaryOrange.withOpacity(.12),
-              blurRadius: 10,
-              offset: const Offset(0, 7),
-            )
-          ]
+
       ),
       child: ElevatedButton(
         onPressed: isDisabled ? null : onPressed,
@@ -127,9 +121,75 @@ class CustomIconButton extends StatelessWidget {
             : Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(icon, color: Colors.white,width: 18, height: 18,),
-            SizedBox(width: 10,),
-            Text(text, style: const TextStyle(fontSize: 16, color: Colors.white),),
+            SvgPicture.asset(icon, color: Colors.white,width: 16, height: 16,),
+            SizedBox(width: 10),
+            Text(text, style: const TextStyle(fontSize: 13, color: Colors.white),),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class OutlineIconButton extends StatelessWidget {
+  final String text;
+  final String icon;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+  final bool isMuted;
+  final Color? color;
+
+  const OutlineIconButton({
+    required this.text,
+    required this.icon,
+    required this.onPressed,
+    this.color,
+    this.isLoading = false,
+    this.isMuted = false,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDisabled = onPressed == null || isLoading;
+
+    // Define disabled color
+    final Color bgColor = isDisabled
+        ? Colors.grey.shade400
+        : (color ?? AppColors.primaryOrange);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+      ),
+      child: OutlinedButton(
+        onPressed: isDisabled ? null : onPressed,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: isMuted ? Colors.grey.shade100 : Colors.white,
+          side: BorderSide(color: isMuted ? Colors.grey.shade100 : bgColor),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 15),
+        ),
+        child: isLoading
+            ? const SizedBox(
+          height: 24,
+          width: 24,
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
+        )
+            : Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(icon, color: isMuted ? Colors.grey : bgColor,width: 18, height: 18,),
+            SizedBox(width: 5),
+            Text(text, style:  TextStyle(fontSize: 13, color: isMuted ? Colors.grey : bgColor),),
           ],
         ),
       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import '../services/session/session.dart';
 import '../utils/app_color.dart';
 import '../utils/app_icons.dart';
 
@@ -75,6 +77,11 @@ class AppPrimaryBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: height,
       leading: effectiveLeading,
       automaticallyImplyLeading: false,
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
       actions: actions,
       bottom: bottom,
       title: title == null
@@ -83,7 +90,7 @@ class AppPrimaryBar extends StatelessWidget implements PreferredSizeWidget {
           ? Text(
         title!,
         style: const TextStyle(
-          fontSize: 20,
+          fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
       )
@@ -105,6 +112,7 @@ class AppPrimaryBar extends StatelessWidget implements PreferredSizeWidget {
               fontSize: 12,
               color: foregroundColor.withOpacity(0.55),
             ),
+            maxLines: 2,
           ),
         ],
       ),
@@ -119,13 +127,22 @@ class SecondaryAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.onSearchPressed,
     this.onNotificationPressed,
     this.bottom,
+    this.actions,
     this.height = 64,
+    this.isHome = true,
+    this.title = "My Work",
+    this.subTitle = "Everything assigned to you across every project",
+    this.count = "",
   });
 
   final VoidCallback? onSearchPressed;
   final VoidCallback? onNotificationPressed;
   final PreferredSizeWidget? bottom;
-
+  final bool isHome;
+  final String? title;
+  final String? subTitle;
+  final String? count;
+  final List<Widget>? actions;
   final double height;
 
   @override
@@ -137,10 +154,16 @@ class SecondaryAppbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
 
     return AppBar(
-      toolbarHeight: height,
+      automaticallyImplyLeading: false,
+      systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
       title: ListTile(
         contentPadding: EdgeInsets.zero,
-        leading: Container(
+        leading: isHome ?
+        Container(
           width: 45,
           height: 45,
           decoration: BoxDecoration(
@@ -149,8 +172,9 @@ class SecondaryAppbar extends StatelessWidget implements PreferredSizeWidget {
             image: DecorationImage(image: AssetImage(AppImages.person),fit: BoxFit.contain)
           ),
           // child: Image.asset(AppImages.person,),
-        ),
-        title:  Row(
+        ):null,
+        title: isHome ?
+        Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('Good Morning', style: TextStyle(
@@ -165,16 +189,45 @@ class SecondaryAppbar extends StatelessWidget implements PreferredSizeWidget {
               child: SvgPicture.asset(AppIcons.morning,height: 15,),
             ),
           ],
+        ):
+        Row(
+          children: [
+            Text(title!, style: TextStyle(
+              color: AppColors.textDark,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),),
+            SizedBox(width: 5,),
+            count!.isNotEmpty ?
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8,vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(13),
+              ), child: Text(count!, style: TextStyle(
+              color: AppColors.textMuted,
+              fontSize: 12,
+            ),),
+            ): SizedBox()
+          ],
         ),
-        subtitle: Text('Field Worker', style: TextStyle(
+        subtitle: isHome ?
+        Text(MockSession.currentRole.name.isNotEmpty
+            ? '${MockSession.currentRole.name[0].toUpperCase()}${MockSession.currentRole.name.substring(1)}'
+            : '',
+          style: TextStyle(
             color: AppColors.textDark,
             fontSize: 15,
             fontWeight: FontWeight.w600,
+        ),) :
+        Text(subTitle!, style: TextStyle(
+            color: AppColors.textMuted,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
         ),),
 
       ),
-      automaticallyImplyLeading: false,
-      actions: [
+      actions: isHome ? [
         Padding(
           padding: const EdgeInsets.only(right: 15),
           child: Row(
@@ -209,7 +262,7 @@ class SecondaryAppbar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
-      ],
+      ] : actions,
       bottom: bottom,
     );
   }

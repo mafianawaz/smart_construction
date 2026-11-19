@@ -14,7 +14,4 @@ class HomeLogic extends GetxController{
   void changeIndex(int index) {
     selectedIndex.value = index;
   }
-
-  // Toggle Switch
-  var isAvailable = true.obs;
 }

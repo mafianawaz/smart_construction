@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import '../utils/app_color.dart';
 
 class CustomTextField extends StatelessWidget {
   final String? heading;
+  final bool isMuted;
   final String hintText;
   final TextEditingController? controller;
   final TextInputType keyboardType;
@@ -21,6 +23,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final Color? filledColor;
   final bool? isFilled;
+  final List<TextInputFormatter>?inputFormatter;
 
   const CustomTextField({
     super.key,
@@ -36,12 +39,14 @@ class CustomTextField extends StatelessWidget {
     this.leftIconPath,
     this.rightIcon,
     this.heading,
+    this.isMuted = false,
     this.onChange,
     this.validate,
     this.onTogglePasswordStatus,
     this.maxLines,
     this.filledColor,
     this.isFilled = false,
+    this.inputFormatter,
   });
 
   @override
@@ -54,17 +59,28 @@ class CustomTextField extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text(
+              child: isMuted ?
+              Text(
+                heading!.toUpperCase(),
+                style: TextStyle(
+                  color: AppColors.textMuted,
+                  fontSize: 10.5,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.4,
+                ),
+              ):
+              Text(
                 heading!,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.textDark
+                  color: AppColors.textDark,
                 ),
               ),
             ),
           ),
         TextFormField(
+          inputFormatters: inputFormatter,
           controller: controller,
           onChanged: onChange,
           readOnly: readOnly,
@@ -79,8 +95,8 @@ class CustomTextField extends StatelessWidget {
           onSaved: onSubmit,
           style: const TextStyle(fontSize: 14, color: AppColors.textDark),
           decoration: InputDecoration(
-            filled: true,
-            fillColor: AppColors.fieldFill,
+            filled: isFilled ?? true,
+            fillColor: filledColor ?? AppColors.fieldFill,
             hintText: hintText,
             hintStyle: TextStyle(
               color: theme.hintColor,

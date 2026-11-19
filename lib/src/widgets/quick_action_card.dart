@@ -93,16 +93,16 @@ class _QuickActionItemView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 68,
-                height: 68,
+                width: 55,
+                height: 55,
                 decoration: BoxDecoration(
                   color: item.iconColor.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Center(
                   child: Container(
-                    width: 45,
-                    height: 45,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       color: item.iconColor,
                       borderRadius: BorderRadius.circular(15),
@@ -124,7 +124,6 @@ class _QuickActionItemView extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 8),
 
               Text(
@@ -133,7 +132,7 @@ class _QuickActionItemView extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 13,
+                  fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                 ),

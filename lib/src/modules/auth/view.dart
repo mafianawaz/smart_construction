@@ -73,8 +73,7 @@ class LoginScreen extends StatelessWidget {
                       hintText: '••••••••••',
                       leftIconPath: AppIcons.password,
                       obscureText: controller.obscurePassword,
-                      onTogglePasswordStatus:
-                      controller.togglePasswordVisibility,
+                      onTogglePasswordStatus: controller.togglePasswordVisibility,
                       onSubmit: (_) => controller.login(),
                       validate: controller.validatePassword,
                     ),
